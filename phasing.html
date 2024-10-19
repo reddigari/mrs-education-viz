@@ -15,11 +15,15 @@
     <main>
         <h1>Phasing</h1>  
         <div class="slidecontainer">
+            <div>0-order Phase</div>
               <input type="range" class="slider" min="0" max="100"
                      value="0" id="phase0" autocomplete="off">
               <div id="phaseValue">0.00 rad</div>
         </div>
-        <div id="chart"></div>
+        <div id="chart-container">
+            <div id="chart-real" class="spectrum"><h3>Real</h3></div>
+            <div id="chart-imag" class="spectrum"><h3>Imaginary</h3></div>
+        </div>
     </main>
   </body>
 </html>

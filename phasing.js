@@ -18,9 +18,9 @@ function Config(width=640) {
         .range([this.marginLeft, this.width - this.marginRight]);
     this.y = d3.scaleLinear()
         .range([this.height - this.marginBottom, this.marginTop]);
+    this.chartId = "chart-real";
+    this.component = "real";
 }
-
-
 
 
 function plotData(data, cfg, updateScale=false) {
@@ -29,19 +29,9 @@ function plotData(data, cfg, updateScale=false) {
         cfg.x.domain(d3.extent(data, d => d.ppm).reverse());
         cfg.y.domain(d3.extent(data, d => d.real));
     }
-    //const x = d3.scaleLinear()
-        //.domain(d3.extent(data, d => d.ppm).reverse())
-        //.range([marginLeft, width - marginRight]);
 
-    //const y = d3.scaleLinear()
-        //.domain(d3.extent(data, d => d.real))
-        //.range([height - marginBottom, marginTop]);
-
-    // Create the SVG container.
-    //const svg = d3.create("svg")
-
-    d3.select("#chart").select("svg").remove();
-    const svg = d3.select("#chart").append("svg")
+    d3.select(`#${cfg.chartId}`).select("svg").remove();
+    const svg = d3.select(`#${cfg.chartId}`).append("svg")
         .attr("width", cfg.width)
         .attr("height", cfg.height);
 
@@ -60,7 +50,7 @@ function plotData(data, cfg, updateScale=false) {
 
     const line = d3.line()
         .x(d => cfg.x(d.ppm))
-        .y(d => cfg.y(d.real));
+        .y(d => cfg.y(d[cfg.component]));
 
     svg.append("path")
       .attr("fill", "none")
@@ -69,12 +59,13 @@ function plotData(data, cfg, updateScale=false) {
       .attr("d", line(data));
 }
 
-function adjustPhase(data, phase, cfg) {
+function adjustPhase(data, phase) {
     const phaseScale = d3.scaleLinear([0, 100], [0, Math.PI]);
     const phaseRad = phaseScale(phase);
     document.querySelector("#phaseValue").innerHTML = `${phaseRad.toFixed(2)} rad`;
     const phasedData = data.map(i => rotate(i, phaseRad));
-    plotData(phasedData, cfg, false);
+    //plotData(phasedData, cfg, false);
+    return phasedData
 }
 
 function rotate(item, phase) {
@@ -88,11 +79,17 @@ function rotate(item, phase) {
 async function onReady() {
 
     const data = await d3.json("spectrum.json");
-    const cfg = new Config();
-    plotData(data, cfg, true);
+    const cfgReal = new Config();
+    const cfgImag = new Config();
+    cfgImag.component = "imag";
+    cfgImag.chartId = "chart-imag";
+    plotData(data, cfgReal, true);
+    plotData(data, cfgImag, true);
     const slider = document.querySelector("#phase0");
     slider.addEventListener("input", function(evt) {
-        adjustPhase(data, evt.target.value, cfg)
+        const phasedData = adjustPhase(data, evt.target.value)
+        plotData(phasedData, cfgReal, false);
+        plotData(phasedData, cfgImag, false);
     });
 
 }
