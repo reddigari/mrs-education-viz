@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Phasing</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjs@13.2.0/lib/browser/math.min.js"></script>
+    <script src="phasing.js" type="module"></script>
+  </head>
+  <body>
+    <main>
+        <h1>Phasing</h1>  
+        <div class="slidecontainer">
+              <input type="range" class="slider" min="0" max="100"
+                     value="0" id="phase0" autocomplete="off">
+              <div id="phaseValue">0.00 rad</div>
+        </div>
+        <div id="chart"></div>
+    </main>
+  </body>
+</html>
+
