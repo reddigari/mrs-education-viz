@@ -1,4 +1,6 @@
-function Config(width=640) {
+function Config(chartId) {
+    this.chartId = chartId;
+    const width = getWidth(chartId) || 640;
     this.width = width;
     this.height = 0.8 * width;
     this.marginTop = 20;
@@ -10,7 +12,6 @@ function Config(width=640) {
         .range([this.marginLeft, this.width - this.marginRight]);
     this.y = d3.scaleLinear()
         .range([this.height - this.marginBottom, this.marginTop]);
-    this.chartId = "chart-real";
     this.component = "real";
 }
 
@@ -92,13 +93,17 @@ function update(data, cfgReal, cfgImag) {
     plotData(phasedData, cfgImag, false);
 }
 
+
+function getWidth(divId) {
+    return document.querySelector(`#${divId}`).offsetWidth;
+}
+
 async function onReady() {
 
     const data = await d3.json("spectrum.json");
-    const cfgReal = new Config();
-    const cfgImag = new Config();
+    const cfgReal = new Config("chart-real");
+    const cfgImag = new Config("chart-imag");
     cfgImag.component = "imag";
-    cfgImag.chartId = "chart-imag";
     plotData(data, cfgReal, true);
     plotData(data, cfgImag, true);
     document.querySelectorAll(".slider").forEach(slider => {
