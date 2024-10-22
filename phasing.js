@@ -57,10 +57,9 @@ function degToRad(deg) { return deg * math.pi / 180 };
 function radToDeg(rad) { return rad * 180 / math.pi };
 
 function phaseData(data, phases) {
-    const phase0Scale = d3.scaleLinear([0, 100], [0, Math.PI]);
-    const phase1Scale = d3.scaleLinear([0, 100], [0, Math.PI]);
+    const phase0Scale = d3.scaleLinear([0, 100], [-1 * Math.PI, Math.PI]);
+    const phase1Scale = d3.scaleLinear([0, 100], [-1 * Math.PI, Math.PI]);
     const phasesRad = {"ph0": phase0Scale(phases.ph0), "ph1": phase1Scale(phases.ph1)};
-    console.log(phasesRad);
     document.querySelector("#phase0Value").innerHTML = `${phasesRad.ph0.toFixed(2)} rad`;
     document.querySelector("#phase1Value").innerHTML = `${phasesRad.ph1.toFixed(2)} rad/ppm`;
     const phasedData0 = data.map(d => rotate(d, phasesRad.ph0));
